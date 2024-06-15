@@ -1,0 +1,419 @@
+openapi: 3.0.3
+info:
+  title: Reviews.com
+  version: 1.0.0
+  description: >-
+    Reviews.com is an app that allows you to share your thoughts about anything
+    with the whole world. This API handles the requests and responses of the
+    application
+  contact:
+    email: idolevyisrael@gmail.com
+    name: Ido Levy
+servers:
+  - url: http://localhost:4001
+    variables: {}
+    description: Used to run the API on your own device
+paths:
+  /login:
+    summary: Login a user
+    post:
+      requestBody:
+        description: An object that holds the user's credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/login'
+      summary: Login a user
+      description: ''
+      operationId: login_user
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Success:
+                  value: '"Successfully logged in!"'
+      tags:
+        - Login
+  /register:
+    summary: Sign up a user to the app
+    post:
+      summary: Register a user
+      description: ''
+      operationId: register_user
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Success:
+                  value:
+                    err: false
+                    res: Successfully registered! enjoy!
+      requestBody:
+        description: An object that holds the user's new credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/register'
+      tags:
+        - Sign up
+  /all/reviews/{reviewId}:
+    summary: >-
+      Get a review by its id (of type UUID v4). The id is passed to the path as
+      a parameter
+    get:
+      parameters:
+        - in: path
+          name: reviewId
+          schema:
+            type: string
+          required: true
+          description: ID of the review to get
+      summary: >-
+        Get a review by its id (of type UUID v4). The id is passed to the path
+        as a parameter
+      description: ''
+      operationId: get_review_by_id
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Success response to /all/reviews/4c80d522-3d2d-4bf1-904e-bbb7b0914060:
+                  value: |2-
+                       {
+                            "id": "4c80d522-3d2d-4bf1-904e-bbb7b0914060",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "Redux",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "13:52:00",
+                            "img": "https://bendyworks.com/assets/images/blog/2020-05-04-ionic-react-and-redux-74ed1080.png",
+                            "rating": 8,
+                            "content": "Great",
+                            "subject": "Tech"
+                        }
+      tags:
+        - All Reviews
+  /all/reviews/subject/{subject}:
+    summary: Get a review by subject. Should be in Title case.
+    get:
+      parameters:
+        - in: path
+          name: subject
+          schema:
+            type: string
+          required: true
+          description: Subject of the reviews to get
+      summary: Get a review by subject. Should be in Title case.
+      description: ''
+      operationId: get_review_by_subject
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful response for /all/reviews/subject/AI:
+                  value: |-
+                    [
+                        {
+                            "id": "13a64c44-b508-48e4-ada2-e397307ec723",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "Midjourney",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://miro.medium.com/v2/resize:fit:0/1*sTXgMwDUW0pk-1yK4iHYFw.png",
+                            "rating": 10,
+                            "content": "Incredible.",
+                            "subject": "AI"
+                        },
+                        {
+                            "id": "64552587-7bd1-4fdd-ab46-b11ff38f30f2",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "ChatGPT",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://uploads-ssl.webflow.com/5b105a0c66f2f636c7884a17/64063dbcad97bd421b437096_chatgpt.jpg",
+                            "rating": 9,
+                            "content": "An incredible language model. Can be a threat to jobs in the future, but right now its awesome",
+                            "subject": "AI"
+                        }
+                    ]
+      tags:
+        - All Reviews
+  /al/reviews/title/{title}:
+    summary: Get a review by its title
+    get:
+      parameters:
+        - in: path
+          name: title
+          schema:
+            type: string
+          required: true
+          description: title of the review to get
+      summary: Get a review by its title
+      description: ''
+      operationId: get_review_by_title
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful response for /all/reviews/title/Peanut butter:
+                  value: |-
+                    {
+                        "err": false,
+                        "res": [
+                            {
+                                "id": "e0757f80-f89a-415a-8f71-2e3b6195709e",
+                                "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                                "title": "Peanut butter",
+                                "author": "TheIdoLevy",
+                                "date": "2023-07-15T21:00:00.000Z",
+                                "time": "14:06:00",
+                                "img": "https://www.luvele.com.au/cdn/shop/articles/peanut_butter_01_1600x.png?v=1564366196",
+                                "rating": 10,
+                                "content": "Really Really Really good.",
+                                "subject": "food"
+                            }
+                        ]
+                    }
+      tags:
+        - All Reviews
+  /user/history:
+    summary: >-
+      Get and edit a user's history. The user must be logged in to access this
+      endpoint
+    get:
+      summary: >-
+        Get and edit a user's history. The user must be logged in to access this
+        endpoint
+      description: ''
+      operationId: get_user_history
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - User History
+    put:
+      summary: Edit user history. A user must be logged in to access this endpoint.
+      description: ''
+      operationId: edit_user_history
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - User History
+  /reviews:
+    summary: >-
+      Perform CRUD operations on reviews. A user must be logged in to access
+      this endpoint.
+    get:
+      summary: >-
+        Get a review by the logged-in-user's id. A user must be logged in to
+        access this endpoint.
+      description: ''
+      operationId: get_review_by_user_id
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Successful response:
+                  value: |2-
+                      [  
+                    {
+                            "id": "23e351e1-b2fc-4ae3-8b44-68df20ead3f0",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "CRA",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://www.codemotion.com/magazine/wp-content/uploads/2021/06/react-in-visual-studio.png",
+                            "rating": 8,
+                            "content": "Really really good.",
+                            "subject": "Tech"
+                        },
+                        {
+                            "id": "34194c89-7a7d-40a4-a301-b464f7f52230",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "The Library",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://cdn.archilovers.com/projects/c_383_4fbb515b-8bb8-4ef0-a252-62396feb20ed.jpg",
+                            "rating": 10,
+                            "content": "AMAZING!!!!",
+                            "subject": "Hotels"
+                        },
+                        {
+                            "id": "81ee48b0-729d-4bd2-b043-3e009858d17d",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "Joma",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://static.wixstatic.com/media/c6c9be_5922943c0ae545e585689a5f2e3aa7c2~mv2.jpg/v1/fit/w_500,h_500,q_90/file.jpg",
+                            "rating": 10,
+                            "content": "So Good.",
+                            "subject": "Restaurants"
+                        },
+                        {
+                            "id": "704d7886-6138-45ef-899c-a672787745da",
+                            "user_id": "6c55d9db-3d13-49f1-8ef5-6f9acfca1ae6",
+                            "title": "Apple",
+                            "author": "TheIdoLevy",
+                            "date": "2023-07-15T21:00:00.000Z",
+                            "time": "14:06:00",
+                            "img": "https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/04/04/16/apple-hq2.jpg",
+                            "rating": 10,
+                            "content": "Pretty good.",
+                            "subject": "Tech"
+                        }
+                    ]
+      tags:
+        - Reviews
+    post:
+      summary: Post a new review. The user must be logged in to access this endpoint
+      description: ''
+      operationId: post_review
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            application/json:
+              examples:
+                Success:
+                  value:
+                    err: false
+                    res: Successfully posted your review!
+      requestBody:
+        description: An object holding the post's data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/postReview'
+      tags:
+        - Reviews
+    put:
+      summary: >-
+        Edit a post. A user must be logged in to access this endpoint. A user
+        can only edit their posts.
+      description: ''
+      operationId: edit_post
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Success:
+                  value: '"Successfully updated you review"'
+      requestBody:
+        description: An object holding the new data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/editReview'
+      tags:
+        - Reviews
+  /logout:
+    summary: Logout a user
+    get:
+      summary: Logout a user
+      description: ''
+      operationId: logout_user
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Successfully logged out:
+                  value: '''Successfully logged out!'''
+      tags:
+        - Logout
+  /reviews/{reviewToDelete}:
+    summary: >-
+      Delete a review. A user must be logged on to access this endpoint. A user
+      can only delete their posts.
+    delete:
+      summary: >-
+        Delete a review. A user must be logged on to access this endpoint. A
+        user can only delete their posts.
+      parameters:
+        - in: path
+          name: reviewToDelete
+          schema:
+            type: string
+          required: true
+          description: Id of the review to delete (must belong to the logged in user)
+      description: ''
+      operationId: delete_review
+      responses:
+        default:
+          description: Default error sample response
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Successful response for DELETE /reviews/f2d3e176-42de-4d1b-aae2-3c86de0123e7:
+                  value: >-
+                    Successfuly deleted you review (id:
+                    f2d3e176-42de-4d1b-aae2-3c86de0123e7)
+      tags:
+        - Reviews
+components:
+  schemas:
+    login:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+    register:
+      type: object
+      properties:
+        password:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+    postReview:
+      type: object
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        img:
+          type: string
+        rating:
+          type: integer
+        content:
+          type: string
+        subject:
+          type: string
+    editReview:
+      type: object
+      properties:
+        img:
+          type: string
+        rating:
+          type: integer
+        content:
+          type: integer
